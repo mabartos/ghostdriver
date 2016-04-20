@@ -73,11 +73,12 @@ public class ElementMethodsTest extends BaseTestWithServer {
     public void checkClickOnAHREFCausesPageLoad() {
         WebDriver d = getDriver();
 
-        d.get("http://www.google.com");
-        WebElement link = d.findElement(By.cssSelector("a[href=\"/intl/en/ads/\"]"));
+        d.get("http://www.google.com/intl/en/");
+        System.out.println(d.getPageSource());
+        WebElement link = d.findElement(By.linkText("Images"));
         link.click();
 
-        assertTrue(d.getTitle().contains("Ads"));
+        assertTrue(d.getTitle().contains("Google Images"));
     }
 
     @Test
