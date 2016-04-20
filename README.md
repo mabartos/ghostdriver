@@ -1,20 +1,10 @@
-# HELP NEEDED
-I have been away from this project for 2+ years. Family and change or more intense and demanding work, made it impossible to maintain this properly.
+# This is a fork
 
-Lots has changed: PhantomJS is now 2.x and lots of this code should be revised, tested and validated to work with latest PhantomJS **whilst** conforming to latest WebDriver specs.
-All of this requires a big effort and commitment that I can't make.
+The original creator of PhantomJS driver [Ivan De Marino](https://github.com/detro) cannot support the project anymore.
 
-I have been merging some obviously good PR, but not testing them: I have to assume that submitters did it!.
+That's why we forked the original repo to [github.com/codeborne/ghostdriver](https://github.com/codeborne/ghostdriver).
 
-__GhostDriver__ needs a proper maintainer. Someone that can prove she/he can understand this codebase and bring it forward. There are many MANY things that need to be done to make this project survive.
-
-**Are you out there?**
-
----
-
-### Alternatives
-
-If you need a better maintained WebDriver implementation, and write your code in Java, why not checkout [Machine Publishers' jBrowserDriver](https://github.com/MachinePublishers/jBrowserDriver/)? Tell [Dan Hollingsworth](https://github.com/hollingsworthd) I sent you.
+Any help is still needed, especially pull requests.
 
 ---
 
@@ -38,6 +28,8 @@ contained in PhantomJS `"1.9.7"`
 For more info, please take a look at the [changelog](https://github.com/detro/ghostdriver/blob/master/CHANGELOG.md).
 
 The project was created and is lead by [Ivan De Marino](https://github.com/detro).
+
+Current fork is supported by [Andrei Solntsev](https://github.com/asolntsev).
 
 IRC channel: [#phantomjs-ghostdriver](http://webchat.freenode.net/?channels=%23phantomjs-ghostdriver).
 
