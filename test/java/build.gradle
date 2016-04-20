@@ -30,7 +30,7 @@ apply plugin: "idea"
 apply plugin: "eclipse"
 
 task wrapper(type: Wrapper) {
-    gradleVersion = "1.12"
+    gradleVersion = "2.12"
     jarFile = "gradle/gradle-wrapper.jar"
 }
 
