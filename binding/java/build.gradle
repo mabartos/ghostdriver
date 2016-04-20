@@ -122,6 +122,14 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     }
 }
 
+// copy all dependencies to build/lib for easier IDE setup without need for Gradle IDE plugin
+task libs(type: Sync) {
+  from configurations.compile
+  into "$buildDir/lib"
+}
+
+compileJava.dependsOn libs
+
 // Make all Jars
 task jars {
     dependsOn jar, sourceJar, javadocJar

@@ -67,6 +67,14 @@ tasks.withType(JavaExec) {
     args project.hasProperty("args") ? project.args.split("\\s") : []
 }
 
+// copy all dependencies to build/lib for easier IDE setup without need for Gradle IDE plugin
+task libs(type: Sync) {
+  from configurations.testCompile
+  into "$buildDir/lib"
+}
+
+compileJava.dependsOn libs
+
 test {
     maxParallelForks = 3
 
