@@ -60,8 +60,8 @@ dependencies {
     testCompile "com.github.detro:browsermob-proxy-client:$browsermobProxyClientVersion"
 
     // Library under test (PhantomJS Driver, aka "PhantomJS WebDriver Java Binding")
-//    testCompile files("../../binding/java/jars/phantomjsdriver-${phantomjsdriverVersion}.jar")
-    testCompile "com.codeborne:phantomjsdriver:$phantomjsdriverVersion"
+    testCompile files("../../binding/java/jars/phantomjsdriver-${phantomjsdriverVersion}.jar")
+    // testCompile "com.codeborne:phantomjsdriver:$phantomjsdriverVersion"
 }
 
 tasks.withType(JavaExec) {
