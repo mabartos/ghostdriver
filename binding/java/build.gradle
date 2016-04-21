@@ -36,6 +36,8 @@ task wrapper(type: Wrapper) {
     jarFile         = "gradle/gradle-wrapper.jar"
 }
 
+defaultTasks 'check', 'jars', 'install'
+
 repositories {
     mavenCentral()
 }

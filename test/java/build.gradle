@@ -29,6 +29,8 @@ apply plugin: "java"
 apply plugin: "idea"
 apply plugin: "eclipse"
 
+defaultTasks 'check', 'test'
+
 task wrapper(type: Wrapper) {
     gradleVersion = "2.12"
     jarFile = "gradle/gradle-wrapper.jar"
@@ -38,11 +40,11 @@ repositories {
     mavenCentral()
 }
 
-ext.commonsFileUploadVersion = "1.3"
-ext.seleniumVersion = "2.41.0"
-ext.junitVersion = "4.11"
-ext.jettyVersion = "6.1.21"
-ext.jsr305Version = "2.0.1"
+ext.commonsFileUploadVersion = "1.3.1"
+ext.seleniumVersion = "2.44.0"
+ext.junitVersion = "4.12"
+ext.jettyVersion = "6.1.26"
+ext.jsr305Version = "3.0.1"
 ext.browsermobProxyClientVersion = "0.1.3"
 ext.phantomjsdriverVersion = "1.3.0-SNAPSHOT"
 
@@ -52,13 +54,13 @@ dependencies {
         testCompile "org.seleniumhq.selenium:$it:$seleniumVersion"
     }
     testCompile "com.google.code.findbugs:jsr305:$jsr305Version"
-    testCompile "junit:junit-dep:$junitVersion"
+    testCompile "junit:junit:$junitVersion"
     testCompile "org.mortbay.jetty:jetty:$jettyVersion"
     testCompile "commons-fileupload:commons-fileupload:$commonsFileUploadVersion"
     testCompile "com.github.detro:browsermob-proxy-client:$browsermobProxyClientVersion"
 
     // Library under test (PhantomJS Driver, aka "PhantomJS WebDriver Java Binding")
-//    testCompile files("../../binding/java/jars/phantomjsdriver-1.3.0-SNAPSHOT.jar")
+//    testCompile files("../../binding/java/jars/phantomjsdriver-${phantomjsdriverVersion}.jar")
     testCompile "com.codeborne:phantomjsdriver:$phantomjsdriverVersion"
 }
 
