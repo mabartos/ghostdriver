@@ -105,6 +105,10 @@ task sourceJar(type: Jar, dependsOn: classes) {
     }
 }
 
+javadoc {
+    failOnError=false
+}
+
 // JavaDoc Jar
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = "javadoc"
