@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v1.4.0 (2016-05-??)
+* 
+
 ## v1.3.0 (2016-04-22)
 * upgraded to selenium 2.53.0
 * upgraded to Java 7
