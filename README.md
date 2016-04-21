@@ -57,23 +57,13 @@ under the same name within the [Selenium project](http://docs.seleniumhq.org/doc
 
 ### Include Java Bindings in your Maven project
 
-For versions >= 1.2.0, add the following to your `pom.xml`:
+For versions >= 1.2.1, add the following to your `pom.xml`:
 
 ```xml
 <dependency>
-    <groupId>com.github.detro</groupId>
+    <groupId>com.codeborne</groupId>
     <artifactId>phantomjsdriver</artifactId>
-    <version>1.2.0</version>
-</dependency>
-```
-
-For versions < 1.2.0, add the following to your `pom.xml`:
-
-```xml
-<dependency>
-    <groupId>com.github.detro.ghostdriver</groupId>
-    <artifactId>phantomjsdriver</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.1</version>
 </dependency>
 ```
 
@@ -84,13 +74,13 @@ Just add the following to your `build.gradle`:
 ```gradle
 dependencies {
     ...
-    testCompile "com.github.detro.ghostdriver:phantomjsdriver:LATEST_VERSION_HERE"
+    testCompile "com.codeborne:phantomjsdriver:LATEST_VERSION_HERE"
     ...
 }
 ```
 
 ### Search Maven
-For other options on how to include the PhantomJSDriver dependency into your project, click [here](http://search.maven.org/#search%7Cga%7C1%7Ccom.github.detro.ghostdriver).
+For other options on how to include the PhantomJSDriver dependency into your project, click [here](http://search.maven.org/#search%7Cga%7C1%7Ccom.codeborne.phantomjsdriver).
 
 ### Alternative: how to use it via `RemoteWebDriver`
 
