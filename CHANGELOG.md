@@ -1,6 +1,12 @@
 # CHANGELOG
 
-## v1.2.0 (?-?-?) ([issues](https://github.com/detro/ghostdriver/issues?labels=1.2.0&state=closed)) **NOT RELEASED YET**
+## v1.3.0 (2016-04-21)
+* upgrade to selenium 2.53.0
+
+## v1.2.1 (2014-12-04)
+* Issue 397: Cannot use PhantomJS with selenium-java 2.44.0
+
+## v1.2.0 (2014-05-08) ([issues](https://github.com/detro/ghostdriver/issues?labels=1.2.0&state=closed))
 
 ### JavaScript Driver (Core)
 
