@@ -46,9 +46,9 @@ compileJava {
 }
 
 project.archivesBaseName    = project.name
-project.version             = "1.3.0"
+project.version             = "1.3.0-SNAPSHOT"
 
-ext.projectGroupId          = "com.github.detro"
+ext.projectGroupId          = "com.codeborne"
 ext.projectArtifactId       = "phantomjsdriver"
 ext.projectLongName         = "PhantomJS Driver (GhostDriver)"
 ext.projectArtefactDir      = "jars/"
@@ -63,10 +63,10 @@ dependencies {
     }
 }
 
-// Forces Java 6 compile source/target
+// Forces Java 7 compile source/target
 compileJava {
-    sourceCompatibility = 1.6
-    targetCompatibility = 1.6
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
 }
 
 tasks.withType(JavaExec) {
