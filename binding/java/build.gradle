@@ -191,13 +191,13 @@ uploadArchives {
                 artifactId      projectArtifactId
                 version         project.version
                 packaging       "jar"
-                url             "https://github.com/detro/ghostdriver"
+                url             "https://github.com/codeborne/ghostdriver"
                 inceptionYear   "2012"
 
                 scm {
-                    url                     "https://github.com/detro/ghostdriver"
-                    connection              "scm:git:git@github.com:detro/ghostdriver.git"
-                    developerConnection     "scm:git:git@github.com:detro/ghostdriver.git"
+                    url                     "https://github.com/codeborne/ghostdriver"
+                    connection              "scm:git:git@github.com:codeborne/ghostdriver.git"
+                    developerConnection     "scm:git:git@github.com:codeborne/ghostdriver.git"
                 }
 
                 licenses {
@@ -218,6 +218,16 @@ uploadArchives {
                             role    "Developer"
                         }
                         timezone    "GMT"
+                    }
+                    developer {
+                        id          "asolntsev"
+                        name        "Andrei Solntsev"
+                        email       "andrei.solntsev@gmail.com"
+                        url         "asolntsev.github.io"
+                        roles {
+                            role    "Maintainer"
+                        }
+                        timezone    "GMT+3"
                     }
                 }
             }
