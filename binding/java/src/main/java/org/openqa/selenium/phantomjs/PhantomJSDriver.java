@@ -143,11 +143,11 @@ public class PhantomJSDriver extends RemoteWebDriver implements TakesScreenshot 
      * Execute a PhantomJS fragment.  Provides extra functionality not found in WebDriver
      * but available in PhantomJS.
      * <p/>
-     * See the <a href="http://phantomjs.org/api/">PhantomJS API<</a>
+     * See the <a href="http://phantomjs.org/api/">PhantomJS API</a>
      * for details on what is available.
      * <p/>
-     * A 'page' variable pointing to currently selected page is available for use.
-     * If there is no page yet, one is created.
+     * Use <code>this</code> to access the <a href="http://phantomjs.org/api/webpage/">phantom 'page' variable</a>
+     * pointing to current page. If there is no page yet, one is created.
      * <p/>
      * When overriding any callbacks be sure to wrap in a try/catch block, as failures
      * may cause future WebDriver calls to fail.
@@ -155,6 +155,39 @@ public class PhantomJSDriver extends RemoteWebDriver implements TakesScreenshot 
      * Certain callbacks are used by GhostDriver (the PhantomJS WebDriver implementation)
      * already.  Overriding these may cause the script to fail.  It's a good idea to check
      * for existing callbacks before overriding.
+     * <p/>
+     * Example usages:
+     * <pre>
+     * {@code
+     * // results are returned back
+     * Object result = phantom.executePhantomJS("return 1 + 1");
+     * System.out.println(result); // => 2
+     * }
+     * </pre>
+     *
+     * <pre>
+     * {@code
+     * // you can pass arguments to the script
+     * Object result = phantom.executePhantomJS("return arguments[0] + arguments[0]", new Long(1));
+     * System.out.println(result); // => 2
+     * }
+     * </pre>
+     *
+     * <pre>
+     * {@code
+     * // phantom page API is accessible as 'this'
+     * Object result  = driver.executePhantomJS(
+     *     "var page = this;" +
+     *     "page.onConsoleMessage = function(msg) {" +
+     *         "console.log('BROWSER CONSOLE:', msg);" +
+     *     "};" +
+     *     "page.onInitialized = function () { " +
+     *         "page.evaluate(function () { " +
+     *             "console.log('Hello world!')" +
+     *         "})" +
+     *     "}");
+     * </pre>
+     *
      *
      * @param script The fragment of PhantomJS JavaScript to execute.
      * @param args List of arguments to pass to the function that the script is wrapped in.
