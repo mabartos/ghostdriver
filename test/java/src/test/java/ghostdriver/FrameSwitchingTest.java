@@ -40,6 +40,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.function.Function;
 
 import static org.junit.Assert.*;
 
@@ -438,13 +439,12 @@ public class FrameSwitchingTest extends BaseTestWithServer {
         assertEquals(0, d.findElements(By.id(iFrameId)).size());
         assertFalse(d.getPageSource().toLowerCase().contains("iframe content"));
 
-        new WebDriverWait(d, 5).until(new Predicate<WebDriver>() {
-            @Override
-            public boolean apply(@Nullable WebDriver driver) {
-                assertEquals(0, driver.findElements(By.id(iFrameId)).size());
-                return (Boolean) ((JavascriptExecutor) driver).executeScript("return false;");
-            }
-        });
+        Function<WebDriver, Boolean> falsy = driver -> {
+            assertEquals(0, driver.findElements(By.id(iFrameId)).size());
+            return (Boolean) ((JavascriptExecutor) driver).executeScript("return false;");
+        };
+        
+        new WebDriverWait(d, 5).until(falsy);
     }
 
     @Test
