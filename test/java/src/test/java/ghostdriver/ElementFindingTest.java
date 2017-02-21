@@ -30,6 +30,7 @@ package ghostdriver;
 import ghostdriver.server.HttpRequestCallback;
 import org.junit.Test;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.FluentWait;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 import static org.junit.Assert.*;
 
@@ -129,13 +131,9 @@ public class ElementFindingTest extends BaseTestWithServer {
 
         d.get("http://www.google.com");
         WebElement inputField = d.findElement(By.cssSelector("input[name='q']"));
-        WebElement active = d.switchTo().activeElement();
-
-        assertEquals(inputField.getTagName(), active.getTagName());
-        assertEquals(inputField.getLocation(), active.getLocation());
-        assertEquals(inputField.hashCode(), active.hashCode());
-        assertEquals(inputField.getText(), active.getText());
-        assertTrue(inputField.equals(active));
+        new FluentWait<>(d).until((Function<WebDriver, Boolean>) webDriver -> 
+            d.switchTo().activeElement().equals(inputField)
+        );
     }
 
     @Test(expected = NoSuchElementException.class)
