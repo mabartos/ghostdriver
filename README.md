@@ -63,7 +63,7 @@ For versions >= 1.2.1, add the following to your `pom.xml`:
 <dependency>
     <groupId>com.codeborne</groupId>
     <artifactId>phantomjsdriver</artifactId>
-    <version>1.2.1</version>
+    <version>1.4.0</version>
 </dependency>
 ```
 
