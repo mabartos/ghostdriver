@@ -36,7 +36,7 @@ IRC channel: [#phantomjs-ghostdriver](http://webchat.freenode.net/?channels=%23p
 ## Setup
 
 * Download latest stable PhantomJS from [here](http://phantomjs.org/download.html)
-* Selenium version `">= 2.33.0`"
+* Selenium version `">= 3.1.0`"
 
 **THAT'S IT!!** Because of latest stable GhostDriver being embedded in PhantomJS,
 you shouldn't need anything else to get started.
@@ -124,7 +124,7 @@ If you are planning to contribute, that is the PhantomJS you should use.
 
 Here I show how to clone this repo and kick start the (Java) tests. You need
 [Java SDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-to run them (I tested it with Java 7, but should work with Java 6 too).
+to run them (Java 8 is required).
 
 1. `git clone https://github.com/detro/ghostdriver.git`
 2. Configure `phantomjs_exec_path` inside `ghostdriver/test/config.ini` to point at the build of PhantomJS you just did
