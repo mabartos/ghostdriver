@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## v1.4.0 (2016-05-??)
-* update to selenium 2.53.0  --  https://github.com/detro/ghostdriver/pull/475 from jesg:update-atoms-selenium-2.53.0
+## v1.4.0 (2017-02-21)
+* updated to selenium 3.1.0
+* updated to Java 8
 
 ## v1.3.0 (2016-04-22)
 * upgraded to selenium 2.53.0
