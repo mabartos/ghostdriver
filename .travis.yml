@@ -1,0 +1,21 @@
+branches:
+  only:
+    - master
+
+language: java
+cache:
+  directories:
+  - $HOME/.gradle
+
+script:
+- cd binding/java
+- ./gradlew
+- cd ../../test/java
+- ./gradlew test
+- cd ../.."
+
+jdk:
+  - oraclejdk8
+
+before_install:
+- "phantomjs --version"
