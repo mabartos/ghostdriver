@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v1.4.1 (2017-02-24)
+* fix cyclic dependency: replace "selenium-java 3.1.0" by "selenium-api 3.1.0"
+
 ## v1.4.0 (2017-02-21)
 * updated to selenium 3.1.0
 * updated to Java 8

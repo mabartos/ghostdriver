@@ -48,7 +48,7 @@ compileJava {
 }
 
 project.archivesBaseName    = project.name
-project.version             = "1.4.0"
+project.version             = "1.4.1"
 
 ext.projectGroupId          = "com.codeborne"
 ext.projectArtifactId       = "phantomjsdriver"
