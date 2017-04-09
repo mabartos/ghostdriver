@@ -64,7 +64,7 @@ public class MouseCommandsTest extends BaseTestWithServer {
         // Left click
         actionBuilder.click().build().perform();
         // Right click
-        actionBuilder.contextClick(null).build().perform();
+        actionBuilder.contextClick(d.findElement(By.id("search_form_input_homepage"))).build().perform();
         // Right click on the logo (it will cause a "/moveto" before clicking
         actionBuilder.contextClick(d.findElement(By.id("logo_homepage_link"))).build().perform();
     }
