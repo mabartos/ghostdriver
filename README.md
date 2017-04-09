@@ -36,7 +36,7 @@ IRC channel: [#phantomjs-ghostdriver](http://webchat.freenode.net/?channels=%23p
 ## Setup
 
 * Download latest stable PhantomJS from [here](http://phantomjs.org/download.html)
-* Selenium version `">= 3.1.0`"
+* Selenium version `">= 3.3.1`"
 
 **THAT'S IT!!** Because of latest stable GhostDriver being embedded in PhantomJS,
 you shouldn't need anything else to get started.
@@ -63,7 +63,7 @@ For versions >= 1.2.1, add the following to your `pom.xml`:
 <dependency>
     <groupId>com.codeborne</groupId>
     <artifactId>phantomjsdriver</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.2</version>
 </dependency>
 ```
 
