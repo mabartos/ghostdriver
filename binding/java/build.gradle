@@ -48,7 +48,7 @@ compileJava {
 }
 
 project.archivesBaseName    = project.name
-project.version             = "1.4.2"
+project.version             = "1.4.3"
 
 ext.projectGroupId          = "com.codeborne"
 ext.projectArtifactId       = "phantomjsdriver"
@@ -57,7 +57,7 @@ ext.projectArtefactDir      = "jars/"
 ext.projectMainClass        = "org.openqa.selenium.phantomjs.PhantomJSDriver"
 ext.projectCreator          = "Ivan De Marino (https://github.com/detro)"
 
-ext.seleniumVersion         = "3.3.1"
+ext.seleniumVersion         = "3.4.0"
 
 dependencies {
     ["selenium-api", "selenium-remote-driver"].each {
