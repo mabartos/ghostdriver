@@ -89,7 +89,7 @@ public abstract class BaseTest {
             if (sConfig.getProperty("phantomjs_exec_path") != null) {
                 sCaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, sConfig.getProperty("phantomjs_exec_path"));
             } else {
-                throw new IOException(String.format("Property '%s' not set!", PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY));
+                System.out.println(String.format("Property '%s' not set. Hoping to find phantomjs in PATH.", PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY));
             }
             // "phantomjs_driver_path"
             if (sConfig.getProperty("phantomjs_driver_path") != null) {
