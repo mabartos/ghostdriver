@@ -167,8 +167,8 @@ signing {
 //    signing.keyId=<YOUR PGP KEY ID>
 //    signing.password=<PASSWORD TO PGP SECRET RING>
 //    signing.secretKeyRingFile=<FULLPATH TO PGP SECRET RING>
-//    ossrhUsername=<OSS Sonatype Username>
-//    ossrhPassword=<OSS Sonatype Password>
+//    sonatypeUsername=<OSS Sonatype Username>
+//    sonatypePassword=<OSS Sonatype Password>
 //
 uploadArchives {
     repositories {
@@ -180,7 +180,7 @@ uploadArchives {
             repository(url: project.version.endsWith("-SNAPSHOT") ?
                                         'https://oss.sonatype.org/content/repositories/snapshots/' :
                                         'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
             }
 
             pom.project {
