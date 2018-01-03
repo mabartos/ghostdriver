@@ -49,15 +49,21 @@ public class NavigationTest extends BaseTest {
         WebDriver d = getDriver();
 
         d.get("https://developer.mozilla.org/en-US/");
-        assertTrue(d.getTitle().toLowerCase().contains("Mozilla".toLowerCase()));
+        assertTitle(d, "MDN");
         d.navigate().to("https://developer.mozilla.org/en/HTML/HTML5");
-        assertTrue(d.getTitle().toLowerCase().contains("HTML5".toLowerCase()));
+        assertTitle(d, "HTML5");
         d.navigate().refresh();
-        assertTrue(d.getTitle().toLowerCase().contains("HTML5".toLowerCase()));
+        assertTitle(d, "HTML5");
         d.navigate().back();
-        assertTrue(d.getTitle().toLowerCase().contains("Mozilla".toLowerCase()));
+        assertTitle(d, "MDN");
         d.navigate().forward();
-        assertTrue(d.getTitle().toLowerCase().contains("HTML5".toLowerCase()));
+        assertTitle(d, "HTML5");
+    }
+
+    private void assertTitle(WebDriver d, String expectedTitle) {
+        String title = d.getTitle();
+        assertTrue("Expected title: '" + expectedTitle + "', actual title: '" + title + "'",
+            title.toLowerCase().contains(expectedTitle.toLowerCase()));
     }
 
     @Test

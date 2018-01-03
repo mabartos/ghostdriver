@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.4.4 (2018-01-03)
+* updated to selenium 3.8.1
+* updated to gradle 4.4.1
+
 ## v1.4.3 (2017-05-19)
 * updated to selenium 3.4.0
 * updated to gradle 3.5
