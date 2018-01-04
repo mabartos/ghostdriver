@@ -6,6 +6,7 @@ Makefile*
 *.iml
 target/
 build
+binding/java/jars
 *.log
 .gradle
 *.ipr
