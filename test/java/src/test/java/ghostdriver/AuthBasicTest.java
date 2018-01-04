@@ -27,30 +27,32 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package ghostdriver;
 
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
-public class AuthBasicTest extends BaseTest {
+import static org.junit.Assert.assertTrue;
+
+public class AuthBasicTest {
+    private static DriverFactory factory = new DriverFactory();
 
     // credentials for testing, no one would ever use these
     private final static String userName = "admin";
     private final static String password = "admin";
 
-    @Override
-    public void prepareDriver() throws Exception {
-        sCaps.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX + "userName", userName);
-        sCaps.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX + "password", password);
-
-        super.prepareDriver();
+    public WebDriver createDriver() {
+        DesiredCapabilities capabilities = factory.getCapabilities();
+        capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX + "userName", userName);
+        capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX + "password", password);
+        return new PhantomJSDriver(capabilities);
     }
 
     @Test
     public void simpleBasicAuthShouldWork() {
         // Get Driver Instance
-        WebDriver driver = getDriver();
+        WebDriver driver = createDriver();
 
         // wrong password
         driver.get(String.format("http://httpbin.org/basic-auth/%s/Wrong%s", userName, password));

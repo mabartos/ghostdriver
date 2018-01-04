@@ -28,13 +28,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package ghostdriver;
 
 import com.google.common.base.Function;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.*;
 
 import static org.junit.Assert.*;
 import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 
-public class WindowSwitchingTest extends BaseTestWithServer {
+public class WindowSwitchingTest extends BaseTest {
+    @Rule
+    public TestWithServer server = new TestWithServer();
+
     @Test
     public void switchBetween3WindowsThenDeleteSecondOne() {
         WebDriver d = getDriver();
@@ -139,7 +143,7 @@ public class WindowSwitchingTest extends BaseTestWithServer {
     }
 
     @Test
-    public void shouldBeAbleToClickALinkThatClosesAWindow() throws Exception {
+    public void shouldBeAbleToClickALinkThatClosesAWindow() {
         final WebDriver d = getDriver();
         d.get(server.getBaseUrl() + "/common/javascriptPage.html");
 

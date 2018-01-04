@@ -27,19 +27,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package ghostdriver;
 
-import ghostdriver.server.HttpRequestCallback;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Set;
 
 import static org.junit.Assert.*;
 
-public class WindowHandlesTest extends BaseTestWithServer {
+public class WindowHandlesTest extends BaseTest {
+    @Rule
+    public TestWithServer server = new TestWithServer();
+
     @Test
     public void enumerateWindowHandles() {
         WebDriver d = getDriver();
@@ -64,29 +64,24 @@ public class WindowHandlesTest extends BaseTestWithServer {
     }
 
     @Test
-    public void openPopupAndGetCurrentUrl() throws InterruptedException {
-        server.setHttpHandler("GET", new HttpRequestCallback() {
-            @Override
-            public void call(HttpServletRequest req, HttpServletResponse res) throws IOException {
-                res.getOutputStream().println("<html>" +
-                        "<head>" +
-                        "<script language=\"javascript\" type=\"text/javascript\">\n" +
-                        "function openProjectPopup(url) {\n" +
-                        "    var popWidth  = 1024;\n" +
-                        "    var leftX  = (screen.width) ? (screen.width-popWidth)/2 : 0;\n" +
-                        "    var height = screen.availHeight;\n" +
-                        "    var win = window.open(url, \"projectPopup\", \"left=\"+leftX+\",top=0,width=\"+popWidth+\",height=\"+height+\",location=yes,menubar=no,resizable=yes,status=no,scrollbars=yes\");\n" +
-                        "    win.location.href='http://www.jnto.go.jp/'; //put a link to a slow loading webpage here\n" +
-                        "    win.focus();\n" +
-                        "}\n" +
-                        "</script>\n" +
-                        "</head>\n" +
-                        "   <body>\n" +
-                        "       <a href=\"popup.htm\" onclick=\"return openProjectPopup('popup.htm')\">Link to popup</a>" +
-                        "   </body>\n" +
-                        "</html>");
-            }
-        });
+    public void openPopupAndGetCurrentUrl() {
+        server.setHttpHandler("GET", (req, res) -> res.getOutputStream().println("<html>" +
+                "<head>" +
+                "<script language=\"javascript\" type=\"text/javascript\">\n" +
+                "function openProjectPopup(url) {\n" +
+                "    var popWidth  = 1024;\n" +
+                "    var leftX  = (screen.width) ? (screen.width-popWidth)/2 : 0;\n" +
+                "    var height = screen.availHeight;\n" +
+                "    var win = window.open(url, \"projectPopup\", \"left=\"+leftX+\",top=0,width=\"+popWidth+\",height=\"+height+\",location=yes,menubar=no,resizable=yes,status=no,scrollbars=yes\");\n" +
+                "    win.location.href='http://www.jnto.go.jp/'; //put a link to a slow loading webpage here\n" +
+                "    win.focus();\n" +
+                "}\n" +
+                "</script>\n" +
+                "</head>\n" +
+                "   <body>\n" +
+                "       <a href=\"popup.htm\" onclick=\"return openProjectPopup('popup.htm')\">Link to popup</a>" +
+                "   </body>\n" +
+                "</html>"));
 
         // Load page
         WebDriver d = getDriver();

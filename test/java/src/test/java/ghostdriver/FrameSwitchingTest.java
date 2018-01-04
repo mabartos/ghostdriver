@@ -28,7 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package ghostdriver;
 
 import ghostdriver.server.GetFixtureHttpRequestCallback;
-import ghostdriver.server.HttpRequestCallback;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.*;
 
@@ -42,7 +42,9 @@ import static org.junit.Assert.*;
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleContains;
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
-public class FrameSwitchingTest extends BaseTestWithServer {
+public class FrameSwitchingTest extends BaseTest {
+    @Rule
+    public TestWithServer server = new TestWithServer();
 
     private String getCurrentFrameName(WebDriver driver) {
         return (String)((JavascriptExecutor) driver).executeScript("return window.frameElement ? " +
@@ -94,7 +96,7 @@ public class FrameSwitchingTest extends BaseTestWithServer {
     }
 
     @Test(expected = NoSuchFrameException.class)
-    public void failToSwitchToFrameByName() throws Exception {
+    public void failToSwitchToFrameByName() {
         WebDriver d = getDriver();
         d.get("http://docs.wpm.neustar.biz/testscript-api/index.html");
         d.switchTo().frame("unavailable frame");
@@ -131,7 +133,7 @@ public class FrameSwitchingTest extends BaseTestWithServer {
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void shouldBeAbleToClickInAFrameAfterRunningJavaScript() throws InterruptedException {
+    public void shouldBeAbleToClickInAFrameAfterRunningJavaScript() {
         WebDriver d = getDriver();
 
         // Navigate to page and ensure we are on the Main Frame
@@ -190,7 +192,7 @@ public class FrameSwitchingTest extends BaseTestWithServer {
     }
 
     @Test
-    public void pageSourceShouldReturnSourceOfFocusedFrame() throws InterruptedException {
+    public void pageSourceShouldReturnSourceOfFocusedFrame() {
         WebDriver d = getDriver();
         d.get("http://docs.wpm.neustar.biz/testscript-api/index.html");
 
@@ -204,7 +206,7 @@ public class FrameSwitchingTest extends BaseTestWithServer {
     }
 
     @Test
-    public void shouldSwitchBackToMainFrameIfLinkInFrameCausesTopFrameReload() throws Exception {
+    public void shouldSwitchBackToMainFrameIfLinkInFrameCausesTopFrameReload() {
         WebDriver d = getDriver();
         String expectedTitle = "Unique title";
 
@@ -247,53 +249,7 @@ public class FrameSwitchingTest extends BaseTestWithServer {
 
     @Test
     public void shouldSwitchBetweenNestedFrames() {
-        // Define HTTP response for test
-        server.setHttpHandler("GET", new HttpRequestCallback() {
-            @Override
-            public void call(HttpServletRequest req, HttpServletResponse res) throws IOException {
-                String pathInfo = req.getPathInfo();
-                ServletOutputStream out = res.getOutputStream();
-
-                // NOTE: the following pages are cut&paste from "Watir" test specs.
-                // @see https://github.com/watir/watirspec/tree/master/html/nested_frame.html
-                if (pathInfo.endsWith("nested_frame_1.html")) {
-                    // nested frame 1
-                    out.println("frame 1");
-                } else if (pathInfo.endsWith("nested_frame_2.html")) {
-                    // nested frame 2
-                    out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">\n" +
-                            "<html>\n" +
-                            "  <body>\n" +
-                            "    <iframe id=\"three\" src=\"nested_frame_3.html\"></iframe>\n" +
-                            "  </body>\n" +
-                            "</html>");
-                } else if (pathInfo.endsWith("nested_frame_3.html")) {
-                    // nested frame 3, nested inside frame 2
-                    out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">\n" +
-                            "<html>\n" +
-                            "  <body>\n" +
-                            "    <a id=\"four\" href=\"definition_lists.html\" target=\"_top\">this link should consume the page</a>\n" +
-                            "  </body>\n" +
-                            "</html>");
-                } else if (pathInfo.endsWith("definition_lists.html")) {
-                    // definition lists
-                    out.println("<html>\n" +
-                            "  <head>\n" +
-                            "    <title>definition_lists</title>\n" +
-                            "  </head>\n" +
-                            "</html>");
-                } else {
-                    // main page
-                    out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">\n" +
-                            "<html>\n" +
-                            "  <frameset cols=\"20%, 80%\">\n" +
-                            "    <frame id=\"one\" src=\"nested_frame_1.html\">\n" +
-                            "    <frame id=\"two\" src=\"nested_frame_2.html\">\n" +
-                            "  </frameset>\n" +
-                            "</html>");
-                }
-            }
-        });
+        defineHttpResponseForTest();
 
         // Launch Driver against the above defined server
         WebDriver d = getDriver();
@@ -312,53 +268,7 @@ public class FrameSwitchingTest extends BaseTestWithServer {
 
     @Test
     public void shouldSwitchBetweenNestedFramesPickedViaWebElement() {
-        // Define HTTP response for test
-        server.setHttpHandler("GET", new HttpRequestCallback() {
-            @Override
-            public void call(HttpServletRequest req, HttpServletResponse res) throws IOException {
-                String pathInfo = req.getPathInfo();
-                ServletOutputStream out = res.getOutputStream();
-
-                // NOTE: the following pages are cut&paste from "Watir" test specs.
-                // @see https://github.com/watir/watirspec/tree/master/html/nested_frame.html
-                if (pathInfo.endsWith("nested_frame_1.html")) {
-                    // nested frame 1
-                    out.println("frame 1");
-                } else if (pathInfo.endsWith("nested_frame_2.html")) {
-                    // nested frame 2
-                    out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">\n" +
-                            "<html>\n" +
-                            "  <body>\n" +
-                            "    <iframe id=\"three\" src=\"nested_frame_3.html\"></iframe>\n" +
-                            "  </body>\n" +
-                            "</html>");
-                } else if (pathInfo.endsWith("nested_frame_3.html")) {
-                    // nested frame 3, nested inside frame 2
-                    out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">\n" +
-                            "<html>\n" +
-                            "  <body>\n" +
-                            "    <a id=\"four\" href=\"definition_lists.html\" target=\"_top\">this link should consume the page</a>\n" +
-                            "  </body>\n" +
-                            "</html>");
-                } else if (pathInfo.endsWith("definition_lists.html")) {
-                    // definition lists
-                    out.println("<html>\n" +
-                            "  <head>\n" +
-                            "    <title>definition_lists</title>\n" +
-                            "  </head>\n" +
-                            "</html>");
-                } else {
-                    // main page
-                    out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">\n" +
-                            "<html>\n" +
-                            "  <frameset cols=\"20%, 80%\">\n" +
-                            "    <frame id=\"one\" src=\"nested_frame_1.html\">\n" +
-                            "    <frame id=\"two\" src=\"nested_frame_2.html\">\n" +
-                            "  </frameset>\n" +
-                            "</html>");
-                }
-            }
-        });
+        defineHttpResponseForTest();
 
         // Launch Driver against the above defined server
         WebDriver d = getDriver();
@@ -375,18 +285,59 @@ public class FrameSwitchingTest extends BaseTestWithServer {
         wait.until(titleIs("definition_lists"));
     }
 
-    @Test
-    public void shouldBeAbleToSwitchToIFrameThatHasNoNameNorId() {
-        server.setHttpHandler("GET", new HttpRequestCallback() {
-            @Override
-            public void call(HttpServletRequest req, HttpServletResponse res) throws IOException {
-                res.getOutputStream().println("<html>" +
-                        "<body>" +
-                        "   <iframe></iframe>" +
-                        "</body>" +
+    private void defineHttpResponseForTest() {
+        server.setHttpHandler("GET", (req, res) -> {
+            String pathInfo = req.getPathInfo();
+            ServletOutputStream out = res.getOutputStream();
+
+            // NOTE: the following pages are cut&paste from "Watir" test specs.
+            // @see https://github.com/watir/watirspec/tree/master/html/nested_frame.html
+            if (pathInfo.endsWith("nested_frame_1.html")) {
+                // nested frame 1
+                out.println("frame 1");
+            } else if (pathInfo.endsWith("nested_frame_2.html")) {
+                // nested frame 2
+                out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">\n" +
+                        "<html>\n" +
+                        "  <body>\n" +
+                        "    <iframe id=\"three\" src=\"nested_frame_3.html\"></iframe>\n" +
+                        "  </body>\n" +
+                        "</html>");
+            } else if (pathInfo.endsWith("nested_frame_3.html")) {
+                // nested frame 3, nested inside frame 2
+                out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">\n" +
+                        "<html>\n" +
+                        "  <body>\n" +
+                        "    <a id=\"four\" href=\"definition_lists.html\" target=\"_top\">this link should consume the page</a>\n" +
+                        "  </body>\n" +
+                        "</html>");
+            } else if (pathInfo.endsWith("definition_lists.html")) {
+                // definition lists
+                out.println("<html>\n" +
+                        "  <head>\n" +
+                        "    <title>definition_lists</title>\n" +
+                        "  </head>\n" +
+                        "</html>");
+            } else {
+                // main page
+                out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">\n" +
+                        "<html>\n" +
+                        "  <frameset cols=\"20%, 80%\">\n" +
+                        "    <frame id=\"one\" src=\"nested_frame_1.html\">\n" +
+                        "    <frame id=\"two\" src=\"nested_frame_2.html\">\n" +
+                        "  </frameset>\n" +
                         "</html>");
             }
         });
+    }
+
+    @Test
+    public void shouldBeAbleToSwitchToIFrameThatHasNoNameNorId() {
+        server.setHttpHandler("GET", (req, res) -> res.getOutputStream().println("<html>" +
+                "<body>" +
+                "   <iframe></iframe>" +
+                "</body>" +
+                "</html>"));
 
         WebDriver d = getDriver();
         d.get(server.getBaseUrl());
@@ -400,28 +351,25 @@ public class FrameSwitchingTest extends BaseTestWithServer {
         final String iFrameId = "iframeId";
 
         // Define HTTP response for test
-        server.setHttpHandler("GET", new HttpRequestCallback() {
-            @Override
-            public void call(HttpServletRequest req, HttpServletResponse res) throws IOException {
-                String pathInfo = req.getPathInfo();
-                ServletOutputStream out = res.getOutputStream();
+        server.setHttpHandler("GET", (req, res) -> {
+            String pathInfo = req.getPathInfo();
+            ServletOutputStream out = res.getOutputStream();
 
-                if (pathInfo.endsWith("iframe_content.html")) {
-                    // nested frame 1
-                    out.println("iframe content");
-                } else {
-                    // main page
-                    out.println("<html>\n" +
-                            "<body>\n" +
-                            "  <iframe id='" + iFrameId + "'></iframe>\n" +
-                            "  <script>\n" +
-                            "  setTimeout(function() {\n" +
-                            "    document.getElementById('" + iFrameId + "').src='iframe_content.html';\n" +
-                            "  }, 2000);\n" +
-                            "  </script>\n" +
-                            "</body>\n" +
-                            "</html>");
-                }
+            if (pathInfo.endsWith("iframe_content.html")) {
+                // nested frame 1
+                out.println("iframe content");
+            } else {
+                // main page
+                out.println("<html>\n" +
+                        "<body>\n" +
+                        "  <iframe id='" + iFrameId + "'></iframe>\n" +
+                        "  <script>\n" +
+                        "  setTimeout(function() {\n" +
+                        "    document.getElementById('" + iFrameId + "').src='iframe_content.html';\n" +
+                        "  }, 2000);\n" +
+                        "  </script>\n" +
+                        "</body>\n" +
+                        "</html>");
             }
         });
 

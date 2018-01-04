@@ -33,6 +33,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -46,7 +47,10 @@ import java.util.List;
 import static org.openqa.selenium.support.ui.ExpectedConditions.invisibilityOfElementLocated;
 import static org.openqa.selenium.support.ui.ExpectedConditions.textToBePresentInElementLocated;
 
-public class DirectFileUploadTest extends BaseTestWithServer {
+public class DirectFileUploadTest extends BaseTest {
+    @Rule
+    public TestWithServer server = new TestWithServer();
+
     private static final String LOREM_IPSUM_TEXT = "lorem ipsum dolor sit amet";
     private static final String FILE_HTML = "<div>" + LOREM_IPSUM_TEXT + "</div>";
 

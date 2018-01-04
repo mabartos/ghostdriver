@@ -27,18 +27,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package ghostdriver;
 
-import ghostdriver.server.HttpRequestCallback;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+public class MouseCommandsTest extends BaseTest {
+    @Rule
+    public TestWithServer server = new TestWithServer();
 
-public class MouseCommandsTest extends BaseTestWithServer {
     @Test
     public void move() {
         WebDriver d = getDriver();
@@ -100,27 +99,22 @@ public class MouseCommandsTest extends BaseTestWithServer {
     @Test
     public void handleClickWhenOnClickInlineCodeFails() {
         // Define HTTP response for test
-        server.setHttpHandler("GET", new HttpRequestCallback() {
-            @Override
-            public void call(HttpServletRequest req, HttpServletResponse res) throws IOException {
-                res.getOutputStream().println("<html>" +
-                        "<head>" +
-                        "<script>\n" +
-                        "function functionThatHasErrors() {\n" +
-                        "    a.callSomeMethodThatDoesntExist();\n" +
-                        "}\n" +
-                        "function validFunction() {\n" +
-                        "    window.location = 'http://google.com';\n" +
-                        "}\n" +
-                        "</script>\n" +
-                        "</head>" +
-                        "<body>" +
-                        "\n" +
-                        "<a href=\"javascript:;\" onclick=\"validFunction();functionThatHasErrors();\">Click me</a>" +
-                        "</body>" +
-                        "</html>");
-            }
-        });
+        server.setHttpHandler("GET", (req, res) -> res.getOutputStream().println("<html>" +
+                "<head>" +
+                "<script>\n" +
+                "function functionThatHasErrors() {\n" +
+                "    a.callSomeMethodThatDoesntExist();\n" +
+                "}\n" +
+                "function validFunction() {\n" +
+                "    window.location = 'http://google.com';\n" +
+                "}\n" +
+                "</script>\n" +
+                "</head>" +
+                "<body>" +
+                "\n" +
+                "<a href=\"javascript:;\" onclick=\"validFunction();functionThatHasErrors();\">Click me</a>" +
+                "</body>" +
+                "</html>"));
 
         // Navigate to local server
         WebDriver d = getDriver();

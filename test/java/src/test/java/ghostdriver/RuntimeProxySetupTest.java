@@ -36,7 +36,9 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -47,14 +49,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(Parameterized.class)
-public class RuntimeProxySetupTest extends BaseTestWithServer {
+public class RuntimeProxySetupTest {
+    private static DriverFactory factory = new DriverFactory();
     private static BMPCLocalManager localProxyManager;
     private BMPCProxy proxy;
     private URL url;
+    WebDriver driver;
 
     @Parameterized.Parameters(name = "URL requested through Proxy: {0}")
     public static Collection<URL[]> data() throws Exception {
-        List<URL[]> requestedUrls = new ArrayList<URL[]>();
+        List<URL[]> requestedUrls = new ArrayList<>();
         requestedUrls.add(new URL[]{new URL("http://www.google.com/")});
         requestedUrls.add(new URL[]{new URL("http://ivandemarino.me/ghostdriver/")});
         return requestedUrls;
@@ -70,17 +74,17 @@ public class RuntimeProxySetupTest extends BaseTestWithServer {
     }
 
     @Before
-    public void createProxy() throws Exception {
+    public void createProxy() {
         proxy = localProxyManager.createProxy();
-        sCaps.setCapability(CapabilityType.PROXY, proxy.asSeleniumProxy());
-        prepareDriver();
+        DesiredCapabilities capabilities = factory.getCapabilities();
+        capabilities.setCapability(CapabilityType.PROXY, proxy.asSeleniumProxy());
+        driver = new PhantomJSDriver(capabilities);
     }
 
     @Test
     public void requestsProcessedByProxy() {
         proxy.newHar(url.toString());
 
-        WebDriver driver = getDriver();
         driver.navigate().to(url);
 
         JsonObject har = proxy.har();
@@ -98,7 +102,7 @@ public class RuntimeProxySetupTest extends BaseTestWithServer {
     }
 
     @AfterClass
-    public static void stopProxyManager() throws Exception {
+    public static void stopProxyManager() {
         localProxyManager.closeAll();
         localProxyManager.stop();
     }

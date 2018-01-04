@@ -27,7 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package ghostdriver;
 
-import ghostdriver.server.HttpRequestCallback;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -36,15 +36,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertTrue;
 
 @RunWith(value = Parameterized.class)
-public class ElementJQueryEventsTest extends BaseTestWithServer {
+public class ElementJQueryEventsTest extends BaseTest {
+    @Rule
+    public TestWithServer server = new TestWithServer();
 
     @Parameters(name = "jQuery Version: {0}")
     public static Iterable<Object[]> data() {
@@ -72,28 +71,23 @@ public class ElementJQueryEventsTest extends BaseTestWithServer {
     public void shouldBeAbleToClickAndEventsBubbleUpUsingJquery() {
         final String buttonId = "clickme";
 
-        server.setHttpHandler("GET", new HttpRequestCallback() {
-            @Override
-            public void call(HttpServletRequest req, HttpServletResponse res) throws IOException {
-                res.getOutputStream().println(
-                        "<html>\n" +
-                                "<head>\n" +
-                                "<script src=\"//ajax.googleapis.com/ajax/libs/jquery/" + mJqueryVersion + "/jquery.min.js\"></script>\n" +
-                                "<script type=\"text/javascript\">\n" +
-                                "   var clicked = false;" +
-                                "   $(document).ready(function() {" +
-                                "       $('#" + buttonId + "').bind('click', function(e) {" +
-                                "           clicked = true;" +
-                                "       });" +
-                                "   });\n" +
-                                "</script>\n" +
-                                "</head>\n" +
-                                "<body>\n" +
-                                "    <a href='#' id='" + buttonId + "'>click me</a>\n" +
-                                "</body>\n" +
-                                "</html>");
-            }
-        });
+        server.setHttpHandler("GET", (req, res) -> res.getOutputStream().println(
+                "<html>\n" +
+                        "<head>\n" +
+                        "<script src=\"//ajax.googleapis.com/ajax/libs/jquery/" + mJqueryVersion + "/jquery.min.js\"></script>\n" +
+                        "<script type=\"text/javascript\">\n" +
+                        "   var clicked = false;" +
+                        "   $(document).ready(function() {" +
+                        "       $('#" + buttonId + "').bind('click', function(e) {" +
+                        "           clicked = true;" +
+                        "       });" +
+                        "   });\n" +
+                        "</script>\n" +
+                        "</head>\n" +
+                        "<body>\n" +
+                        "    <a href='#' id='" + buttonId + "'>click me</a>\n" +
+                        "</body>\n" +
+                        "</html>"));
 
         WebDriver d = getDriver();
         d.get(server.getBaseUrl());

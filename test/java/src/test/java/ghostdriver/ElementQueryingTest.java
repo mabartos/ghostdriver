@@ -27,20 +27,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package ghostdriver;
 
-import ghostdriver.server.HttpRequestCallback;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.internal.Locatable;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ElementQueryingTest extends BaseTestWithServer {
+public class ElementQueryingTest extends BaseTest {
+    @Rule
+    public TestWithServer server = new TestWithServer();
+
     @Test
     public void checkAttributesOnGoogleSearchBox() {
         WebDriver d = getDriver();
@@ -88,23 +88,18 @@ public class ElementQueryingTest extends BaseTestWithServer {
 
     @Test
     public void getTextFromDifferentLocationsOfDOMTree() {
-        server.setHttpHandler("GET", new HttpRequestCallback() {
-            @Override
-            public void call(HttpServletRequest req, HttpServletResponse res) throws IOException {
-                res.getOutputStream().println("<html><body>" +
-                        "<div class=\"item\">\n" +
-                        "    <span class=\"item-title\">\n" +
-                        "        <a href=\"#\">\n" +
-                        "             <h1>The Title of The Item</h1>\n" +
-                        "        </a>\n" +
-                        "     </span>\n" +
-                        "     <div>\n" +
-                        "         (Loads of other stuff)\n" +
-                        "     </div>\n" +
-                        "</div>" +
-                        "</body></html>");
-            }
-        });
+        server.setHttpHandler("GET", (req, res) -> res.getOutputStream().println("<html><body>" +
+                "<div class=\"item\">\n" +
+                "    <span class=\"item-title\">\n" +
+                "        <a href=\"#\">\n" +
+                "             <h1>The Title of The Item</h1>\n" +
+                "        </a>\n" +
+                "     </span>\n" +
+                "     <div>\n" +
+                "         (Loads of other stuff)\n" +
+                "     </div>\n" +
+                "</div>" +
+                "</body></html>"));
 
         WebDriver d = getDriver();
         d.get(server.getBaseUrl());
@@ -117,21 +112,16 @@ public class ElementQueryingTest extends BaseTestWithServer {
 
     @Test(expected = InvalidElementStateException.class)
     public void throwExceptionWhenInteractingWithInvisibleElement() {
-        server.setHttpHandler("GET", new HttpRequestCallback() {
-            @Override
-            public void call(HttpServletRequest req, HttpServletResponse res) throws IOException {
-                res.getOutputStream().println("<!DOCTYPE html>" +
-                        "<html>" +
-                        "    <head>\n" +
-                        "        <title>test</title>\n" +
-                        "    </head>\n" +
-                        "    <body>\n" +
-                        "        <input type=\"text\" id=\"visible\">\n" +
-                        "        <input type=\"text\" id=\"invisible\" style=\"display: none;\">\n" +
-                        "    </body>" +
-                        "</html>");
-            }
-        });
+        server.setHttpHandler("GET", (req, res) -> res.getOutputStream().println("<!DOCTYPE html>" +
+                "<html>" +
+                "    <head>\n" +
+                "        <title>test</title>\n" +
+                "    </head>\n" +
+                "    <body>\n" +
+                "        <input type=\"text\" id=\"visible\">\n" +
+                "        <input type=\"text\" id=\"invisible\" style=\"display: none;\">\n" +
+                "    </body>" +
+                "</html>"));
 
         WebDriver d = getDriver();
         d.get(server.getBaseUrl());

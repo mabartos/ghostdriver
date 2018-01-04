@@ -28,20 +28,37 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package ghostdriver;
 
 import ghostdriver.server.CallbackHttpServer;
-import org.junit.After;
-import org.junit.Before;
+import ghostdriver.server.HttpRequestCallback;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
-abstract public class BaseTestWithServer extends BaseTest {
-    protected CallbackHttpServer server;
+public class TestWithServer extends TestWatcher {
+    private CallbackHttpServer server;
 
-    @Before
-    public void startServer() throws Exception {
+    @Override
+    protected void starting(Description description) {
         server = new CallbackHttpServer();
-        server.start();
+        try {
+            server.start();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @After
-    public void stopServer() throws Exception {
-        server.stop();
+    @Override
+    protected void finished(Description description) {
+        try {
+            server.stop();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String getBaseUrl() {
+        return server.getBaseUrl();
+    }
+
+    public void setHttpHandler(String method, HttpRequestCallback handler) {
+        server.setHttpHandler(method, handler);
     }
 }

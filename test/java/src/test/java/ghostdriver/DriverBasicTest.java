@@ -30,11 +30,12 @@ package ghostdriver;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 
-public class DriverBasicTest extends BaseTest {
+public class DriverBasicTest {
+    private static DriverFactory factory = new DriverFactory();
+
     @Test
     public void useDriverButDontQuit() {
-        WebDriver d = getDriver();
-        disableAutoQuitDriver();
+        WebDriver d = factory.createDriver();
 
         d.get("http://www.google.com/");
         d.quit();

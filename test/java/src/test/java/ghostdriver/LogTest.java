@@ -27,6 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package ghostdriver;
 
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -39,7 +40,9 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class LogTest extends BaseTestWithServer {
+public class LogTest extends BaseTest {
+    @Rule public TestWithServer server = new TestWithServer();
+
     @Test
     public void shouldReturnListOfAvailableLogs() {
         WebDriver d = getDriver();

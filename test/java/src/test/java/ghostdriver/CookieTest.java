@@ -30,8 +30,8 @@ package ghostdriver;
 import ghostdriver.server.EmptyPageHttpRequestCallback;
 import ghostdriver.server.HttpRequestCallback;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.InvalidCookieDomainException;
@@ -45,8 +45,9 @@ import java.util.Date;
 
 import static org.junit.Assert.*;
 
-public class CookieTest extends BaseTestWithServer {
-    private WebDriver driver;
+public class CookieTest extends BaseTest {
+    @Rule
+    public TestWithServer server = new TestWithServer();
 
     private final static HttpRequestCallback COOKIE_SETTING_CALLBACK = new EmptyPageHttpRequestCallback() {
         @Override
@@ -65,11 +66,6 @@ public class CookieTest extends BaseTestWithServer {
     };
 
     private final static HttpRequestCallback EMPTY_CALLBACK = new EmptyPageHttpRequestCallback();
-
-    @Before
-    public void setup() {
-        driver = getDriver();
-    }
 
     @After
     public void cleanUp() {

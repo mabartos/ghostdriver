@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package ghostdriver;
 
 import ghostdriver.server.HttpRequestCallback;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -38,22 +39,19 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 import static org.junit.Assert.*;
 
-public class ElementFindingTest extends BaseTestWithServer {
+public class ElementFindingTest extends BaseTest {
+    @Rule
+    public TestWithServer server = new TestWithServer();
+
     @Test
     public void findChildElement() {
-        server.setHttpHandler("GET", new HttpRequestCallback() {
-            @Override
-            public void call(HttpServletRequest req, HttpServletResponse res) throws IOException {
-                res.getOutputStream().println("<div id=\"y-masthead\">" +
-                        "<input type=\"text\" name=\"t\" />" +
-                        "<input type=\"hidden\" name=\"h\" value=\"v\" />" +
-                        "</div>");
-            }
-        });
+        server.setHttpHandler("GET", (req, res) -> res.getOutputStream().println("<div id=\"y-masthead\">" +
+                "<input type=\"text\" name=\"t\" />" +
+                "<input type=\"hidden\" name=\"h\" value=\"v\" />" +
+                "</div>"));
 
         WebDriver d = getDriver();
         d.get(server.getBaseUrl());
@@ -65,15 +63,10 @@ public class ElementFindingTest extends BaseTestWithServer {
 
     @Test
     public void findChildElements() {
-        server.setHttpHandler("GET", new HttpRequestCallback() {
-            @Override
-            public void call(HttpServletRequest req, HttpServletResponse res) throws IOException {
-                res.getOutputStream().println("<div id=\"y-masthead\">" +
-                        "<input type=\"text\" name=\"t\" />" +
-                        "<input type=\"hidden\" name=\"h\" value=\"v\" />" +
-                        "</div>");
-            }
-        });
+        server.setHttpHandler("GET", (req, res) -> res.getOutputStream().println("<div id=\"y-masthead\">" +
+                "<input type=\"text\" name=\"t\" />" +
+                "<input type=\"hidden\" name=\"h\" value=\"v\" />" +
+                "</div>"));
 
         WebDriver d = getDriver();
         d.get(server.getBaseUrl());
@@ -86,16 +79,11 @@ public class ElementFindingTest extends BaseTestWithServer {
 
     @Test
     public void findMultipleElements() {
-        server.setHttpHandler("GET", new HttpRequestCallback() {
-            @Override
-            public void call(HttpServletRequest req, HttpServletResponse res) throws IOException {
-                res.getOutputStream().println("<div id=\"y-masthead\">" +
-                        "<input type=\"text\" name=\"t\" />" +
-                        "<input type=\"hidden\" name=\"h\" value=\"v\" />" +
-                        "<input type=\"button\" name=\"b\" value=\"button\" />" +
-                        "</div>");
-            }
-        });
+        server.setHttpHandler("GET", (req, res) -> res.getOutputStream().println("<div id=\"y-masthead\">" +
+                "<input type=\"text\" name=\"t\" />" +
+                "<input type=\"hidden\" name=\"h\" value=\"v\" />" +
+                "<input type=\"button\" name=\"b\" value=\"button\" />" +
+                "</div>"));
 
         WebDriver d = getDriver();
         d.get(server.getBaseUrl());
@@ -131,7 +119,7 @@ public class ElementFindingTest extends BaseTestWithServer {
 
         d.get("http://www.google.com");
         WebElement inputField = d.findElement(By.cssSelector("input[name='q']"));
-        new FluentWait<>(d).until((Function<WebDriver, Boolean>) webDriver -> 
+        new FluentWait<>(d).until(webDriver ->
             d.switchTo().activeElement().equals(inputField)
         );
     }

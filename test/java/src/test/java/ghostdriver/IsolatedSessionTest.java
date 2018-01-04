@@ -36,7 +36,9 @@ import java.util.Set;
 
 import static org.junit.Assert.assertFalse;
 
-public class IsolatedSessionTest extends BaseTest {
+public class IsolatedSessionTest {
+    private static DriverFactory factory = new DriverFactory();
+
     // New Session Cookies will be stored in here
     private String url = "http://httpbin.org/cookies/set";
     private Set<Cookie> firstSessionCookies;
@@ -44,10 +46,8 @@ public class IsolatedSessionTest extends BaseTest {
 
     @Before
     public void createSession() throws Exception {
-        disableAutoQuitDriver();
-
         // Create first Driver, and grab it's cookies
-        WebDriver d = getDriver();
+        WebDriver d = factory.createDriver();
         d.get(url + "?session1=value1");
         // Grab set of session cookies
         firstSessionCookies = d.manage().getCookies();
@@ -55,8 +55,7 @@ public class IsolatedSessionTest extends BaseTest {
         d.quit();
 
         // Create second Driver, and grab it's cookies
-        prepareDriver();
-        d = getDriver();
+        d = factory.createDriver();
         d.get(url + "?session2=value2");
         // Grab set of session cookies
         secondSessionCookies = d.manage().getCookies();

@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package ghostdriver;
 
 import ghostdriver.server.HttpRequestCallback;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -41,7 +42,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.openqa.selenium.support.ui.ExpectedConditions.textToBePresentInElementLocated;
 
-public class ElementMethodsTest extends BaseTestWithServer {
+public class ElementMethodsTest extends BaseTest {
+    @Rule public TestWithServer server = new TestWithServer();
+
     @Test
     public void checkDisplayedOnGoogleSearchBox() {
         WebDriver d = getDriver();

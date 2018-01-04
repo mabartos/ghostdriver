@@ -27,27 +27,33 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package ghostdriver;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static org.junit.Assert.assertTrue;
 
-public class NavigationTest extends BaseTest {
-    @BeforeClass
-    public static void setUserAgentForPhantomJSDriver() {
+public class NavigationTest {
+    private static DriverFactory factory = new DriverFactory();
+    private WebDriver d;
+
+    @Before
+    public void setUserAgentForPhantomJSDriver() {
+        DesiredCapabilities capabilities = factory.getCapabilities();
+
         // Setting a generic Chrome UA to bypass some UA spoofing
-        sCaps.setCapability(
+        capabilities.setCapability(
                 PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX + "userAgent",
                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11"
         );
+        d = new PhantomJSDriver(capabilities);
     }
 
     @Test
     public void navigateAroundMDN() {
-        WebDriver d = getDriver();
-
         d.get("https://developer.mozilla.org/en-US/");
         assertTitle(d, "MDN");
         d.navigate().to("https://developer.mozilla.org/en/HTML/HTML5");
@@ -67,10 +73,7 @@ public class NavigationTest extends BaseTest {
     }
 
     @Test
-    public void navigateBackWithNoHistory() throws Exception {
-        // Fresh Driver (every test gets one)
-        WebDriver d = getDriver();
-
+    public void navigateBackWithNoHistory() {
         // Navigate back and forward: should be a no-op, given we haven't loaded anything yet
         d.navigate().back();
         d.navigate().forward();
@@ -81,7 +84,6 @@ public class NavigationTest extends BaseTest {
 
     @Test
     public void navigateToGoogleAdwords() {
-        WebDriver d = getDriver();
         d.get("http://adwords.google.com");
         assertTrue(d.getCurrentUrl().contains("google.com"));
     }
@@ -90,7 +92,6 @@ public class NavigationTest extends BaseTest {
     public void navigateToNameJet() {
         // NOTE: This passes only when the User Agent is NOT PhantomJS {@see setUserAgentForPhantomJSDriver}
         // method above.
-        WebDriver d = getDriver();
         d.navigate().to("http://www.namejet.com/");
     }
 }
