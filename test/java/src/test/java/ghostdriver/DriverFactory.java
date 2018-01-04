@@ -73,6 +73,6 @@ public class DriverFactory {
   }
 
   public DesiredCapabilities getCapabilities() {
-    return sCaps;
+    return new DesiredCapabilities(sCaps);
   }
 }
