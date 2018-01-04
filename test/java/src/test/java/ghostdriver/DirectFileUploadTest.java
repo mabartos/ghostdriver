@@ -36,14 +36,15 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
+
+import static org.openqa.selenium.support.ui.ExpectedConditions.invisibilityOfElementLocated;
+import static org.openqa.selenium.support.ui.ExpectedConditions.textToBePresentInElementLocated;
 
 public class DirectFileUploadTest extends BaseTestWithServer {
     private static final String LOREM_IPSUM_TEXT = "lorem ipsum dolor sit amet";
@@ -112,13 +113,11 @@ public class DirectFileUploadTest extends BaseTestWithServer {
 
         // Uploading files across a network may take a while, even if they're really small.
         // Wait for the loading label to disappear.
-        WebDriverWait wait = new WebDriverWait(phantom, 10);
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("upload_label")));
+        wait.until(invisibilityOfElementLocated(By.id("upload_label")));
 
         phantom.switchTo().frame("upload_target");
 
-        wait = new WebDriverWait(phantom, 5);
-        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//body"), LOREM_IPSUM_TEXT));
+        wait.until(textToBePresentInElementLocated(By.xpath("//body"), LOREM_IPSUM_TEXT));
 
         // Navigate after file upload to verify callbacks are properly released.
         phantom.get("http://www.google.com/");

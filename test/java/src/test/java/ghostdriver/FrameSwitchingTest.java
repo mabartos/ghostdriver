@@ -27,15 +27,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package ghostdriver;
 
-import com.google.common.base.Predicate;
 import ghostdriver.server.GetFixtureHttpRequestCallback;
 import ghostdriver.server.HttpRequestCallback;
 import org.junit.Test;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import javax.annotation.Nullable;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,6 +39,8 @@ import java.io.IOException;
 import java.util.function.Function;
 
 import static org.junit.Assert.*;
+import static org.openqa.selenium.support.ui.ExpectedConditions.titleContains;
+import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
 public class FrameSwitchingTest extends BaseTestWithServer {
 
@@ -103,7 +101,7 @@ public class FrameSwitchingTest extends BaseTestWithServer {
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void shouldBeAbleToClickInAFrame() throws InterruptedException {
+    public void shouldBeAbleToClickInAFrame() {
         WebDriver d = getDriver();
 
         d.get("http://docs.wpm.neustar.biz/testscript-api/index.html");
@@ -116,8 +114,7 @@ public class FrameSwitchingTest extends BaseTestWithServer {
         d.findElement(By.linkText("HttpClient")).click();
 
         // Wait for new content to load in the frame.
-        WebDriverWait wait = new WebDriverWait(d, 10);
-        wait.until(ExpectedConditions.titleContains("HttpClient"));
+        wait.until(titleContains("HttpClient"));
 
         // Frame should still be "classFrame"
         assertEquals("classFrame", getCurrentFrameName(d));
@@ -163,8 +160,7 @@ public class FrameSwitchingTest extends BaseTestWithServer {
         d.findElement(By.linkText("HttpClient")).click();
 
         // Wait for new content to load in the frame.
-        WebDriverWait wait = new WebDriverWait(d, 10);
-        wait.until(ExpectedConditions.titleContains("HttpClient"));
+        wait.until(titleContains("HttpClient"));
 
         // Frame should still be "classFrame"
         assertEquals("classFrame", getCurrentFrameName(d));
@@ -242,8 +238,7 @@ public class FrameSwitchingTest extends BaseTestWithServer {
 
         // Wait for new content to load in the frame.
         expectedTitle = "XHTML Test Page";
-        WebDriverWait wait = new WebDriverWait(d, 10);
-        wait.until(ExpectedConditions.titleIs(expectedTitle));
+        wait.until(titleIs(expectedTitle));
         assertEquals(expectedTitle, d.getTitle());
 
         WebElement element = d.findElement(By.id("amazing"));
@@ -312,7 +307,7 @@ public class FrameSwitchingTest extends BaseTestWithServer {
         d.findElement(By.id("four")).click();
 
         // Expect page to have loaded and title to be set correctly
-        new WebDriverWait(d, 5).until(ExpectedConditions.titleIs("definition_lists"));
+        wait.until(titleIs("definition_lists"));
     }
 
     @Test
@@ -377,7 +372,7 @@ public class FrameSwitchingTest extends BaseTestWithServer {
         d.findElement(By.id("four")).click();
 
         // Expect page to have loaded and title to be set correctly
-        new WebDriverWait(d, 5).until(ExpectedConditions.titleIs("definition_lists"));
+        wait.until(titleIs("definition_lists"));
     }
 
     @Test
@@ -444,7 +439,7 @@ public class FrameSwitchingTest extends BaseTestWithServer {
             return (Boolean) ((JavascriptExecutor) driver).executeScript("return false;");
         };
         
-        new WebDriverWait(d, 5).until(falsy);
+        wait.until(falsy);
     }
 
     @Test

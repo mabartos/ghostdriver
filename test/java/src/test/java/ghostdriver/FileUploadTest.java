@@ -37,8 +37,6 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,6 +45,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class FileUploadTest extends BaseTestWithServer {
     private static final String LOREM_IPSUM_TEXT = "lorem ipsum dolor sit amet";
@@ -100,18 +99,16 @@ public class FileUploadTest extends BaseTestWithServer {
 
         // Upload the temp file
         d.get(server.getBaseUrl() + "/common/upload.html");
-        d.findElement(By.id("upload")).sendKeys(testFile.getAbsolutePath());
+        wait.until(visibilityOfElementLocated(By.id("upload"))).sendKeys(testFile.getAbsolutePath());
         d.findElement(By.id("go")).submit();
 
         // Uploading files across a network may take a while, even if they're really small.
         // Wait for the loading label to disappear.
-        WebDriverWait wait = new WebDriverWait(d, 10);
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("upload_label")));
+        wait.until(invisibilityOfElementLocated(By.id("upload_label")));
 
         d.switchTo().frame("upload_target");
 
-        wait = new WebDriverWait(d, 5);
-        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//body"), LOREM_IPSUM_TEXT));
+        wait.until(textToBePresentInElementLocated(By.xpath("//body"), LOREM_IPSUM_TEXT));
 
         // Navigate after file upload to verify callbacks are properly released.
         d.get("http://www.google.com/");
@@ -123,7 +120,7 @@ public class FileUploadTest extends BaseTestWithServer {
 
         // Trying to upload a file that doesn't exist
         d.get(server.getBaseUrl() + "/common/upload.html");
-        d.findElement(By.id("upload")).sendKeys("file_that_does_not_exist.fake");
+        wait.until(visibilityOfElementLocated(By.id("upload"))).sendKeys("file_that_does_not_exist.fake");
         d.findElement(By.id("go")).submit();
 
         // Uploading files across a network may take a while, even if they're really small.
@@ -140,12 +137,12 @@ public class FileUploadTest extends BaseTestWithServer {
         file.deleteOnExit();
 
         d.get(server.getBaseUrl() + "/common/formPage.html");
-        WebElement uploadElement = d.findElement(By.id("upload"));
+        WebElement uploadElement = wait.until(visibilityOfElementLocated(By.id("upload")));
         uploadElement.sendKeys(file.getAbsolutePath());
         uploadElement.submit();
 
         d.get(server.getBaseUrl() + "/common/formPage.html");
-        uploadElement = d.findElement(By.id("upload"));
+        uploadElement = wait.until(visibilityOfElementLocated(By.id("upload")));
         uploadElement.sendKeys(file.getAbsolutePath());
         uploadElement.submit();
      }
@@ -155,7 +152,7 @@ public class FileUploadTest extends BaseTestWithServer {
         WebDriver d = getDriver();
 
         d.get(server.getBaseUrl() + "/common/formPage.html");
-        WebElement uploadElement = d.findElement(By.id("upload"));
+        WebElement uploadElement = wait.until(visibilityOfElementLocated(By.id("upload")));
         WebElement result = d.findElement(By.id("fileResults"));
         assertEquals("", result.getText());
 

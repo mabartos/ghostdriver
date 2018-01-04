@@ -32,8 +32,6 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,6 +39,7 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.openqa.selenium.support.ui.ExpectedConditions.textToBePresentInElementLocated;
 
 public class ElementMethodsTest extends BaseTestWithServer {
     @Test
@@ -109,8 +108,7 @@ public class ElementMethodsTest extends BaseTestWithServer {
         WebElement formElement = d.findElement(By.id("submitListeningForm"));
         formElement.submit();
 
-        WebDriverWait wait = new WebDriverWait(d, 30);
-        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.id("result"), "form-onsubmit"));
+        wait.until(textToBePresentInElementLocated(By.id("result"), "form-onsubmit"));
 
         WebElement result = d.findElement(By.id("result"));
         String text = result.getText();

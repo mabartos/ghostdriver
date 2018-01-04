@@ -30,11 +30,9 @@ package ghostdriver;
 import com.google.common.base.Function;
 import org.junit.Test;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import javax.annotation.Nullable;
 
 import static org.junit.Assert.*;
+import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 
 public class WindowSwitchingTest extends BaseTestWithServer {
     @Test
@@ -149,23 +147,19 @@ public class WindowSwitchingTest extends BaseTestWithServer {
         d.findElement(By.id("new_window")).click();
 
         // Wait until we can switch to the new window
-        WebDriverWait waiter = new WebDriverWait(d, 10);
-        waiter.until(new Function<WebDriver, Object>() {
-            @Override
-            public Object apply(@Nullable WebDriver input) {
-                try {
-                    d.switchTo().window("close_me");
-                    return true;
-                } catch (Exception e) {
-                    return false;
-                }
+        wait.until((Function<WebDriver, Object>) input -> {
+            try {
+                d.switchTo().window("close_me");
+                return true;
+            } catch (Exception e) {
+                return false;
             }
         });
         assertEquals(0, d.findElements(By.id("new_window")).size());
 
         // Click on the "close" link.
         // NOTE : This will cause the window currently in focus to close
-        d.findElement(By.id("close")).click();
+        wait.until(elementToBeClickable(By.id("close"))).click();
 
         d.switchTo().window(handle);
         assertNotNull(d.findElement(By.id("new_window")));
@@ -187,16 +181,12 @@ public class WindowSwitchingTest extends BaseTestWithServer {
         d.findElement(By.name("windowOne")).click();
 
         // Wait until we can switch to the new window
-        WebDriverWait waiter = new WebDriverWait(d, 10);
-        waiter.until(new Function<WebDriver, Object>() {
-            @Override
-            public Object apply(@Nullable WebDriver input) {
-                try {
-                    d.switchTo().window("result");
-                    return true;
-                } catch (Exception e) {
-                    return false;
-                }
+        wait.until((Function<WebDriver, Object>) input -> {
+            try {
+                d.switchTo().window("result");
+                return true;
+            } catch (Exception e) {
+                return false;
             }
         });
         // Check we are on the new window

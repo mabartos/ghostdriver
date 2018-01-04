@@ -37,6 +37,7 @@ import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -50,8 +51,9 @@ import java.util.Properties;
  * Takes care of initialising the Remote WebDriver
  */
 public abstract class BaseTest {
-    private WebDriver mDriver                      = null;
-    private boolean mAutoQuitDriver                = true;
+    private WebDriver mDriver;
+    protected WebDriverWait wait;
+    private boolean mAutoQuitDriver;
 
     private static final String CONFIG_FILE        = "../config.ini";
     private static final String DRIVER_FIREFOX     = "firefox";
@@ -134,6 +136,8 @@ public abstract class BaseTest {
         } else if (driver.equals(DRIVER_PHANTOMJS)) {
             mDriver = new PhantomJSDriver(sCaps);
         }
+
+        wait = new WebDriverWait(mDriver, 10);
     }
 
     protected WebDriver getDriver() {
