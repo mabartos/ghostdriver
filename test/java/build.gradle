@@ -78,10 +78,5 @@ task libs(type: Sync) {
 compileJava.dependsOn libs
 
 test {
-    beforeTest { descriptor ->
-        logger.quiet("start " + descriptor + " in " + descriptor.getParent())
-    }
-    afterTest { descriptor, result ->
-        logger.quiet(result.toString() + " for " + descriptor + " in " + descriptor.getParent())
-    }
+    testLogging.showStandardStreams = true
 }
