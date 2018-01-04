@@ -48,19 +48,27 @@ public class IsolatedSessionTest {
     public void createSession() throws Exception {
         // Create first Driver, and grab it's cookies
         WebDriver d = factory.createDriver();
-        d.get(url + "?session1=value1");
-        // Grab set of session cookies
-        firstSessionCookies = d.manage().getCookies();
-        // Manually quit the current Driver and create a new one
-        d.quit();
+        try {
+            d.get(url + "?session1=value1");
+            // Grab set of session cookies
+            firstSessionCookies = d.manage().getCookies();
+        }
+        finally {
+            // Manually quit the current Driver and create a new one
+            d.quit();
+        }
 
         // Create second Driver, and grab it's cookies
         d = factory.createDriver();
-        d.get(url + "?session2=value2");
-        // Grab set of session cookies
-        secondSessionCookies = d.manage().getCookies();
-        // Manually quit the current Driver and create a new one
-        d.quit();
+        try {
+            d.get(url + "?session2=value2");
+            // Grab set of session cookies
+            secondSessionCookies = d.manage().getCookies();
+        }
+        finally {
+            // Manually quit the current Driver and create a new one
+            d.quit();
+        }
     }
 
     @Test

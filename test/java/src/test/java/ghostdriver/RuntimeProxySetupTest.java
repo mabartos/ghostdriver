@@ -54,7 +54,7 @@ public class RuntimeProxySetupTest {
     private static BMPCLocalManager localProxyManager;
     private BMPCProxy proxy;
     private URL url;
-    WebDriver driver;
+    private WebDriver driver;
 
     @Parameterized.Parameters(name = "URL requested through Proxy: {0}")
     public static Collection<URL[]> data() throws Exception {
@@ -99,6 +99,11 @@ public class RuntimeProxySetupTest {
     @After
     public void closeProxy() {
         proxy.close();
+
+        if (driver != null) {
+            driver.quit();
+            driver = null;
+        }
     }
 
     @AfterClass

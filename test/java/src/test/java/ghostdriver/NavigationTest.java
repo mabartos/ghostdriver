@@ -27,6 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package ghostdriver;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
@@ -50,6 +51,14 @@ public class NavigationTest {
                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11"
         );
         d = new PhantomJSDriver(capabilities);
+    }
+
+    @After
+    public void tearDown() {
+        if (d != null) {
+            d.quit();
+            d = null;
+        }
     }
 
     @Test

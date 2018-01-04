@@ -37,8 +37,12 @@ public class DriverBasicTest {
     public void useDriverButDontQuit() {
         WebDriver d = factory.createDriver();
 
-        d.get("http://www.google.com/");
-        d.quit();
+        try {
+            d.get("http://www.google.com/");
+        }
+        finally {
+            d.quit();
+        }
     }
 
 //    @Test

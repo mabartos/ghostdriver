@@ -42,7 +42,7 @@ public class AuthBasicTest {
     private final static String userName = "admin";
     private final static String password = "admin";
 
-    public WebDriver createDriver() {
+    private WebDriver createDriver() {
         DesiredCapabilities capabilities = factory.getCapabilities();
         capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX + "userName", userName);
         capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX + "password", password);
@@ -53,14 +53,18 @@ public class AuthBasicTest {
     public void simpleBasicAuthShouldWork() {
         // Get Driver Instance
         WebDriver driver = createDriver();
+        try {
+            // wrong password
+            driver.get(String.format("http://httpbin.org/basic-auth/%s/Wrong%s", userName, password));
+            assertTrue(!driver.getPageSource().contains("authenticated"));
 
-        // wrong password
-        driver.get(String.format("http://httpbin.org/basic-auth/%s/Wrong%s", userName, password));
-        assertTrue(!driver.getPageSource().contains("authenticated"));
-
-        // we should be authorized
-        driver.get(String.format("http://httpbin.org/basic-auth/%s/%s", userName, password));
-        assertTrue(driver.getPageSource().contains("authenticated"));
+            // we should be authorized
+            driver.get(String.format("http://httpbin.org/basic-auth/%s/%s", userName, password));
+            assertTrue(driver.getPageSource().contains("authenticated"));
+        }
+        finally {
+            driver.quit();
+        }
     }
 
 }
