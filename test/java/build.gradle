@@ -78,8 +78,6 @@ task libs(type: Sync) {
 compileJava.dependsOn libs
 
 test {
-    maxParallelForks = 3
-
     afterTest { descriptor, result ->
         logger.quiet(result.toString() + " for " + descriptor + " in " + descriptor.getParent())
     }
