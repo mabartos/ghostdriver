@@ -28,19 +28,25 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package ghostdriver;
 
 import ghostdriver.server.FileUploadHandler;
+import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Logger;
 
+import static org.apache.commons.io.FileUtils.writeStringToFile;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class FileUploadTest extends BaseTest {
+    private static final Logger LOG = Logger.getLogger(FileUploadTest.class.getName());
+
     @Rule
     public TestWithServer server = new TestWithServer();
 
@@ -52,12 +58,9 @@ public class FileUploadTest extends BaseTest {
         WebDriver d = getDriver();
 
         // Create the test file for uploading
-        File testFile = File.createTempFile("webdriver", "tmp");
-        testFile.deleteOnExit();
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-            new FileOutputStream(testFile.getAbsolutePath()), "utf-8"));
-        writer.write(FILE_HTML);
-        writer.close();
+        File testFile = new File("build/reports/FileUploadTest.checkFileUploadCompletes." + System.currentTimeMillis() + ".html");
+        writeStringToFile(testFile, FILE_HTML, "UTF-8");
+        LOG.info("Uploading file " + testFile.getAbsolutePath() + " with content " + FileUtils.readFileToString(testFile));
 
         server.setHttpHandler("POST", new FileUploadHandler());
 
