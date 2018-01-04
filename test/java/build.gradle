@@ -78,5 +78,16 @@ task libs(type: Sync) {
 compileJava.dependsOn libs
 
 test {
+    doFirst {
+      new File('phantomjsdriver.log').delete()
+    }
+
     testLogging.showStandardStreams = true
+
+    beforeTest { descriptor ->
+        logger.lifecycle("start " + descriptor + " in " + descriptor.getParent())
+    }
+    afterTest { descriptor, result ->
+        logger.lifecycle(result.toString() + " for " + descriptor + " in " + descriptor.getParent())
+    }
 }
