@@ -45,6 +45,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
+@Ignore("Started hanging on Jenkins after upgrade to selenium 3.8.1")
 public class FileUploadTest extends BaseTest {
     private static final Logger LOG = Logger.getLogger(FileUploadTest.class.getName());
 
@@ -53,7 +54,7 @@ public class FileUploadTest extends BaseTest {
 
     private static final String LOREM_IPSUM_TEXT = "lorem ipsum dolor sit amet";
 
-    @Test @Ignore("Started hanging on Jenkins after upgrade to selenium 3.8.1")
+    @Test
     public void checkFileUploadCompletes() throws IOException {
         WebDriver d = getDriver();
 
