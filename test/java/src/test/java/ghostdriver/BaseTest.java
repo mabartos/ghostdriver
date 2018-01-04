@@ -27,8 +27,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package ghostdriver;
 
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -36,26 +36,18 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  * Tests base class.
  */
 public abstract class BaseTest {
-    private static DriverFactory factory = new DriverFactory();
-
     WebDriver driver;
     WebDriverWait wait;
 
+    @Rule public WebDriverRule webDriverRule = new WebDriverRule();
+
     @Before
-    public void prepareDriver() throws Exception {
-        driver = factory.createDriver();
+    public void prepareDriver() {
+        driver = webDriverRule.getWebDriver();
         wait = new WebDriverWait(driver, 10);
     }
 
     protected WebDriver getDriver() {
         return driver;
-    }
-
-    @After
-    public void quitDriver() {
-        if (driver != null) {
-            driver.quit();
-            driver = null;
-        }
     }
 }
