@@ -28,7 +28,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package ghostdriver;
 
 import ghostdriver.server.FileUploadHandler;
-import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -39,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.apache.commons.io.FileUtils.writeStringToFile;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -51,16 +51,12 @@ public class FileUploadTest extends BaseTest {
     public TestWithServer server = new TestWithServer();
 
     private static final String LOREM_IPSUM_TEXT = "lorem ipsum dolor sit amet";
-    private static final String FILE_HTML = "<div>" + LOREM_IPSUM_TEXT + "</div>";
 
     @Test
     public void checkFileUploadCompletes() throws IOException {
         WebDriver d = getDriver();
 
-        // Create the test file for uploading
-        File testFile = new File("build/reports/FileUploadTest.checkFileUploadCompletes." + System.currentTimeMillis() + ".html");
-        writeStringToFile(testFile, FILE_HTML, "UTF-8");
-        LOG.info("Uploading file " + testFile.getAbsolutePath() + " with content " + FileUtils.readFileToString(testFile));
+        File testFile = createFileForUploading();
 
         server.setHttpHandler("POST", new FileUploadHandler());
 
@@ -79,6 +75,13 @@ public class FileUploadTest extends BaseTest {
 
         // Navigate after file upload to verify callbacks are properly released.
         d.get("http://www.google.com/");
+    }
+
+    private File createFileForUploading() throws IOException {
+        File testFile = new File("build/reports/FileUploadTest.checkFileUploadCompletes." + System.currentTimeMillis() + ".html");
+        writeStringToFile(testFile, "<div>" + LOREM_IPSUM_TEXT + "</div>", "UTF-8");
+        LOG.info("Uploading file " + testFile.getAbsolutePath() + " with content " + readFileToString(testFile));
+        return testFile;
     }
 
     @Test

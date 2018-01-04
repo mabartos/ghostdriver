@@ -34,17 +34,22 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Logger;
 
+import static org.apache.commons.io.FileUtils.readFileToString;
+import static org.apache.commons.io.FileUtils.writeStringToFile;
 import static org.openqa.selenium.support.ui.ExpectedConditions.invisibilityOfElementLocated;
 import static org.openqa.selenium.support.ui.ExpectedConditions.textToBePresentInElementLocated;
 
 public class DirectFileUploadTest extends BaseTest {
+    private static final Logger LOG = Logger.getLogger(DirectFileUploadTest.class.getName());
+
     @Rule
     public TestWithServer server = new TestWithServer();
 
     private static final String LOREM_IPSUM_TEXT = "lorem ipsum dolor sit amet";
-    private static final String FILE_HTML = "<div>" + LOREM_IPSUM_TEXT + "</div>";
 
     @Test
     public void checkFileUploadCompletes() throws IOException {
@@ -58,13 +63,7 @@ public class DirectFileUploadTest extends BaseTest {
 
         String buttonId = "upload";
 
-        // Create the test file for uploading
-        File testFile = File.createTempFile("webdriver", "tmp");
-        testFile.deleteOnExit();
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-            new FileOutputStream(testFile.getAbsolutePath()), "utf-8"));
-        writer.write(FILE_HTML);
-        writer.close();
+        File testFile = createFileForUploading();
 
         server.setHttpHandler("POST", new FileUploadHandler());
 
@@ -85,5 +84,12 @@ public class DirectFileUploadTest extends BaseTest {
 
         // Navigate after file upload to verify callbacks are properly released.
         phantom.get("http://www.google.com/");
+    }
+
+    private File createFileForUploading() throws IOException {
+        File testFile = new File("build/reports/DirectFileUploadTest.checkFileUploadCompletes." + System.currentTimeMillis() + ".html");
+        writeStringToFile(testFile, "<div>" + LOREM_IPSUM_TEXT + "</div>", "UTF-8");
+        LOG.info("Uploading file " + testFile.getAbsolutePath() + " with content " + readFileToString(testFile));
+        return testFile;
     }
 }
