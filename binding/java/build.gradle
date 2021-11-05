@@ -31,7 +31,7 @@ apply plugin: "eclipse"
 apply plugin: "maven"
 apply plugin: "signing"
 
-task wrapper(type: Wrapper) {
+wrapper {
     gradleVersion   = "4.4.1"
     jarFile         = "gradle/gradle-wrapper.jar"
 }
@@ -57,7 +57,7 @@ ext.projectArtefactDir      = "jars/"
 ext.projectMainClass        = "org.openqa.selenium.phantomjs.PhantomJSDriver"
 ext.projectCreator          = "Ivan De Marino (https://github.com/detro)"
 
-ext.seleniumVersion         = "3.8.1"
+ext.seleniumVersion         = "4.0.0"
 
 dependencies {
     ["selenium-api", "selenium-remote-driver"].each {

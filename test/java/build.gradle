@@ -31,7 +31,7 @@ apply plugin: "eclipse"
 
 defaultTasks 'check', 'test'
 
-task wrapper(type: Wrapper) {
+wrapper {
     gradleVersion = "4.4.1"
     jarFile = "gradle/gradle-wrapper.jar"
 }
@@ -43,7 +43,7 @@ repositories {
 dependencies {
     // Test Dependencies
     ["selenium-java", "selenium-remote-driver"].each {
-        testCompile "org.seleniumhq.selenium:$it:3.8.1"
+        testCompile "org.seleniumhq.selenium:$it:4.0.0"
     }
     testCompile "com.google.code.findbugs:jsr305:3.0.1"
     testCompile "junit:junit:4.12"

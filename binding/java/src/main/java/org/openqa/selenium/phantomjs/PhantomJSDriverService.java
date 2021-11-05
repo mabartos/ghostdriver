@@ -144,7 +144,7 @@ public class PhantomJSDriverService extends DriverService {
                                    int port,
                                    ImmutableList<String> args,
                                    ImmutableMap<String, String> environment) throws IOException {
-        super(executable, port, args, environment);
+        super(executable, port, DEFAULT_TIMEOUT, args, environment);
 
         // Print out the parameters used to launch PhantomJS Driver Service
         LOG.info("executable: " + executable.getAbsolutePath());

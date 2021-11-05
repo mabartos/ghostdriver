@@ -30,7 +30,7 @@ package ghostdriver;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.internal.Locatable;
+import org.openqa.selenium.interactions.Locatable;
 
 import java.util.concurrent.TimeUnit;
 

@@ -28,11 +28,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.openqa.selenium.phantomjs;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.remote.CommandInfo;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -41,8 +41,11 @@ import org.openqa.selenium.remote.HttpCommandExecutor;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.internal.WebElementToJsonConverter;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.openqa.selenium.remote.http.HttpMethod.POST;
 
@@ -85,6 +88,8 @@ import static org.openqa.selenium.remote.http.HttpMethod.POST;
  */
 public class PhantomJSDriver extends RemoteWebDriver implements TakesScreenshot {
 
+    public static String BROWSER_NAME = "phantomjs";
+
     /**
      * Creates a new PhantomJSDriver instance. The instance will have a
      * default set of desired capabilities.
@@ -92,7 +97,7 @@ public class PhantomJSDriver extends RemoteWebDriver implements TakesScreenshot 
      * @see org.openqa.selenium.phantomjs.PhantomJSDriverService#createDefaultService() for configuration details.
      */
     public PhantomJSDriver() {
-        this(DesiredCapabilities.phantomjs());
+        this(new DesiredCapabilities(BROWSER_NAME, "", Platform.ANY));
     }
 
     /**
@@ -198,8 +203,11 @@ public class PhantomJSDriver extends RemoteWebDriver implements TakesScreenshot 
     public Object executePhantomJS(String script, Object... args) {
         script = script.replaceAll("\"", "\\\"");
 
-        Iterable<Object> convertedArgs = Iterables.transform(
-                Lists.newArrayList(args), new WebElementToJsonConverter());
+        final Function<Object, Object> transformFunc = new WebElementToJsonConverter();
+        Iterable<Object> convertedArgs = Arrays.stream(args)
+                .map(transformFunc)
+                .collect(Collectors.toList());
+
         Map<String, ?> params = ImmutableMap.of(
                 "script", script, "args", Lists.newArrayList(convertedArgs));
 
